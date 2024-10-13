@@ -63,8 +63,7 @@ setup(
         'WoeUSB/woeusb',
     ],
     install_requires=[
-        'termcolor',
-        'wxPython',
+        'termcolor'
     ],
     cmdclass={
         'develop': PostDevelopCommand,
