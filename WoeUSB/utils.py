@@ -11,7 +11,7 @@ import WoeUSB.miscellaneous as miscellaneous
 _ = miscellaneous.i18n
 
 #: Disable message coloring when set to True, set by --no-color
-no_color = True
+no_color = False
 
 # External tools
 try:
