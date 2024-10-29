@@ -291,7 +291,7 @@ def print_with_color(text, color=""):
             sys.exit()
     else:
         if no_color or color == "":
-            sys.stdout.write(text + "\n")
+            sys.stdout.write(str(text) + "\n")
         else:
             termcolor.cprint(text, color)
 
