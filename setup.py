@@ -1,4 +1,5 @@
 import os
+import platform
 import shutil
 import stat
 
@@ -13,6 +14,8 @@ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 def post_install():
+    if platform.system() != 'Linux':
+        return
     path = '/usr/local/bin/woeusbgui'  # I give up, I have no clue how to get bin path that is used by pip
     shutil.copy2(this_directory + '/WoeUSB/woeusbgui', path)  # I'll just hard code it until someone finds better way
 
