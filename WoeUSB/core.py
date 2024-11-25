@@ -667,12 +667,12 @@ class ReportCopyProgress(threading.Thread):
         threading.Thread.__init__(self)
         self.source = source
         self.target = target
-        self.percentage_old = None
 
     def run(self):
         source_size = utils.get_size(self.source)
         len_ = 0
         file_old = None
+        percentage_old = -1
 
         while not self.stop:
             target_size = utils.get_size(self.target)
@@ -687,7 +687,7 @@ class ReportCopyProgress(threading.Thread):
             # Prevent printing same filenames
             if self.file != file_old:
                 file_old = self.file
-                self.percentage_old = None
+                percentage_old = -1
                 utils.print_with_color(self.file.replace(self.source, ""))
 
             string = "Copied " + utils.convert_to_human_readable_format(
@@ -700,8 +700,8 @@ class ReportCopyProgress(threading.Thread):
                 gui.state = string
                 gui.progress = percentage
             else:
-                if percentage != self.percentage_old:
-                    self.percentage_old = percentage
+                if percentage != percentage_old:
+                    percentage_old = percentage
                     # print(string)
                     print(str(percentage) + "%")
 
