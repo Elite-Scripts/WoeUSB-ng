@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import time
 import shutil
 import argparse
@@ -716,19 +717,21 @@ def run():
         workaround_bios_boot_flag, skip_legacy_bootloader, target_filesystem_type, \
         new_file_system_label, verbose, debug, parser = result
 
+    return_code = -1
     try:
-        main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media, install_mode, temp_directory,
-             target_filesystem_type, workaround_bios_boot_flag, parser, skip_legacy_bootloader)
+        return_code = main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media, install_mode,
+                           temp_directory, target_filesystem_type, workaround_bios_boot_flag, parser,
+                           skip_legacy_bootloader)
     except KeyboardInterrupt:
         pass
     except Exception as error:
         utils.print_with_color(error, "red")
         if debug:
             traceback.print_exc()
-        cleanup(source_fs_mountpoint, target_fs_mountpoint, temp_directory, target_media)
-        raise
 
     cleanup(source_fs_mountpoint, target_fs_mountpoint, temp_directory, target_media)
+    if return_code != 0:
+        raise Exception('An Error has occurred running WoeUSB')
 
 
 if __name__ == "__main__":
