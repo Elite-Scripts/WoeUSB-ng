@@ -725,6 +725,8 @@ def run():
         utils.print_with_color(error, "red")
         if debug:
             traceback.print_exc()
+        cleanup(source_fs_mountpoint, target_fs_mountpoint, temp_directory, target_media)
+        raise
 
     cleanup(source_fs_mountpoint, target_fs_mountpoint, temp_directory, target_media)
 
