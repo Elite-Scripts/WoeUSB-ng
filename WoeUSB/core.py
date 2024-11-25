@@ -667,6 +667,7 @@ class ReportCopyProgress(threading.Thread):
         threading.Thread.__init__(self)
         self.source = source
         self.target = target
+        self.percentage_old = None
 
     def run(self):
         source_size = utils.get_size(self.source)
@@ -676,15 +677,17 @@ class ReportCopyProgress(threading.Thread):
         while not self.stop:
             target_size = utils.get_size(self.target)
 
-            if len_ != 0 and gui is None:
-                print('\033[3A')
-                print(" " * len_)
-                print(" " * 4)
-                print('\033[3A')
+            # Commented out this ANSI cursor control code as it interferes with logging.
+            # if len_ != 0 and gui is None:
+            #     print('\033[3A')
+            #     print(" " * len_)
+            #     print(" " * 4)
+            #     print('\033[3A')
 
             # Prevent printing same filenames
             if self.file != file_old:
                 file_old = self.file
+                self.percentage_old = None
                 utils.print_with_color(self.file.replace(self.source, ""))
 
             string = "Copied " + utils.convert_to_human_readable_format(
@@ -697,8 +700,10 @@ class ReportCopyProgress(threading.Thread):
                 gui.state = string
                 gui.progress = percentage
             else:
-                print(string)
-                print(str(percentage) + "%")
+                if percentage != self.percentage_old:
+                    self.percentage_old = percentage
+                    # print(string)
+                    print(str(percentage) + "%")
 
             time.sleep(0.05)
         if gui is not None:
