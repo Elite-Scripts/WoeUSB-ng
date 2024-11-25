@@ -678,11 +678,11 @@ class ReportCopyProgress(threading.Thread):
             target_size = utils.get_size(self.target)
 
             # Commented out this ANSI cursor control code as it interferes with logging.
-            # if len_ != 0 and gui is None:
-            #     print('\033[3A')
-            #     print(" " * len_)
-            #     print(" " * 4)
-            #     print('\033[3A')
+            if len_ != 0 and gui is None:
+                print('\033[3A')
+                # print(" " * len_)
+                # print(" " * 4)
+                # print('\033[3A')
 
             # Prevent printing same filenames
             if self.file != file_old:
