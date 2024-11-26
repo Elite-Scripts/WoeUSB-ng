@@ -719,6 +719,19 @@ def run():
 
     return_code = -1
     try:
+        print(f'source_fs_mountpoint: {source_fs_mountpoint}')
+        print(f'target_fs_mountpoint: {target_fs_mountpoint}')
+        print(f'temp_directory: {temp_directory}')
+        print(f'install_mode: {install_mode}')
+        print(f'source_media: {source_media}')
+        print(f'target_media: {target_media}')
+        print(f'workaround_bios_boot_flag: {workaround_bios_boot_flag}')
+        print(f'skip_legacy_bootloader: {skip_legacy_bootloader}')
+        print(f'target_filesystem_type: {target_filesystem_type}')
+        print(f'new_file_system_label: {new_file_system_label}')
+        print(f'verbose: {verbose}')
+        print(f'debug: {debug}')
+        print(f'parser: {parser}')
         return_code = main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media, install_mode,
                            temp_directory, target_filesystem_type, workaround_bios_boot_flag, parser,
                            skip_legacy_bootloader)
