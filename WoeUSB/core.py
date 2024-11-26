@@ -40,11 +40,13 @@ current_state = 'pre-init'
 gui = None
 
 
-def init(from_cli=True, install_mode=None, source_media=None, target_media=None, workaround_bios_boot_flag=False,
+def init(from_cli=True, args_list=None, install_mode=None, source_media=None, target_media=None, workaround_bios_boot_flag=False,
          target_filesystem_type="FAT", filesystem_label=DEFAULT_NEW_FS_LABEL):
     """
     :param from_cli:
     :type from_cli: bool
+    :param args_list:
+    :type args_list: list
     :param install_mode:
     :param source_media:
     :param target_media:
@@ -68,10 +70,12 @@ def init(from_cli=True, install_mode=None, source_media=None, target_media=None,
 
     parser = None
 
-    if from_cli:
+    if from_cli or args_list:
         parser = setup_arguments()
-        args = parser.parse_args()
-        print(args)
+        if args_list:
+            args = parser.parse_args(args_list)
+        else:
+            args = parser.parse_args()
 
         if args.about:
             print_application_info()
