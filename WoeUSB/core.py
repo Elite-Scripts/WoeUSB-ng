@@ -226,7 +226,11 @@ def wipe_existing_partition_table_and_filesystem_signatures(target_device):
     :return: None
     """
     utils.print_with_color(_("Wiping all existing partition table and filesystem signatures in {0}").format(target_device), "green")
-    subprocess.run(["wipefs", "--all", target_device])
+    process = subprocess.run(["wipefs", "--all", target_device], stdout=subprocess.PIPE)
+    if process.stdout:
+        utils.print_with_color(process.stdout.decode())
+    if process.stderr:
+        utils.print_with_color(process.stderr.decode(), "red")
     check_if_the_drive_is_really_wiped(target_device)
 
 
