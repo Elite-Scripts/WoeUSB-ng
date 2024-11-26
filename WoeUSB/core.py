@@ -540,10 +540,15 @@ def install_legacy_pc_bootloader_grub(target_fs_mountpoint, target_device, comma
 
     utils.print_with_color(_("Installing GRUB bootloader for legacy PC booting support..."), "green")
 
-    subprocess.run([command_grubinstall,
-                    "--target=i386-pc",
-                    "--boot-directory=" + target_fs_mountpoint,
-                    "--force", target_device])
+    process = subprocess.run([command_grubinstall,
+                              "--target=i386-pc",
+                              "--boot-directory=" + target_fs_mountpoint,
+                              "--force", target_device],
+                             stdout=subprocess.PIPE)
+    if process.stdout:
+        utils.print_with_color(process.stdout.decode())
+    if process.stderr:
+        utils.print_with_color(process.stderr.decode(), "red")
 
 
 def install_legacy_pc_bootloader_grub_config(target_fs_mountpoint, target_device, command_grubinstall,
