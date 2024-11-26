@@ -337,10 +337,18 @@ def create_target_partition(target_device, target_partition, filesystem_type, fi
 
     # Format target partition's filesystem
     if filesystem_type in ["FAT", "vfat"]:
-        subprocess.run([command_mkdosfs, "-F", "32", target_partition], stdout=subprocess.PIPE)
+        process = subprocess.run([command_mkdosfs, "-F", "32", target_partition], stdout=subprocess.PIPE)
+        if process.stdout:
+            utils.print_with_color(process.stdout.decode())
+        if process.stderr:
+            utils.print_with_color(process.stderr.decode(), "red")
     elif filesystem_type in ["NTFS", "ntfs"]:
-        subprocess.run([command_mkntfs, "--quick", "--label", filesystem_label, target_partition],
+        process = subprocess.run([command_mkntfs, "--quick", "--label", filesystem_label, target_partition],
                        stdout=subprocess.PIPE)
+        if process.stdout:
+            utils.print_with_color(process.stdout.decode())
+        if process.stderr:
+            utils.print_with_color(process.stderr.decode(), "red")
     else:
         utils.print_with_color(_("FATAL: Shouldn't be here"), "red")
         return 1
