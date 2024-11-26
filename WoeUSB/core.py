@@ -71,6 +71,7 @@ def init(from_cli=True, install_mode=None, source_media=None, target_media=None,
     if from_cli:
         parser = setup_arguments()
         args = parser.parse_args()
+        print(args)
 
         if args.about:
             print_application_info()
