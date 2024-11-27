@@ -544,7 +544,8 @@ def install_legacy_pc_bootloader_grub(target_fs_mountpoint, target_device, comma
                               "--target=i386-pc",
                               "--boot-directory=" + target_fs_mountpoint,
                               "--force", target_device],
-                             stdout=subprocess.PIPE)
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
     if process.stdout:
         utils.print_with_color(process.stdout.decode())
     if process.stderr:
