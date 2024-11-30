@@ -703,6 +703,7 @@ class ReportCopyProgress(threading.Thread):
         threading.Thread.__init__(self)
         self.source = source
         self.target = target
+        self.percentage = 0
 
     def run(self):
         source_size = utils.get_size(self.source)
@@ -728,6 +729,7 @@ class ReportCopyProgress(threading.Thread):
 
             len_ = len(string)
             percentage = (target_size * 100) // source_size
+            self.percentage = percentage
 
             if gui is not None:
                 gui.state = string
