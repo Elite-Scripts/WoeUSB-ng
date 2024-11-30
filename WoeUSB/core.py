@@ -199,6 +199,8 @@ def main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media,
 
     copy_filesystem_files(source_fs_mountpoint, target_fs_mountpoint)
 
+    current_state = "install-workarounds"
+
     workaround.support_windows_7_uefi_boot(source_fs_mountpoint, target_fs_mountpoint)
     if not skip_legacy_bootloader:
         install_legacy_pc_bootloader_grub(target_fs_mountpoint, target_device, command_grubinstall)
