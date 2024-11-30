@@ -283,6 +283,16 @@ def create_target_partition_table(target_device, partition_table_type):
     return 0
 
 
+def get_current_state():
+    global current_state
+    return current_state
+
+
+def get_copyfiles_handle():
+    global CopyFiles_handle
+    return CopyFiles_handle
+
+
 def create_target_partition(target_device, target_partition, filesystem_type, filesystem_label, command_mkdosfs,
                             command_mkntfs):
     """
