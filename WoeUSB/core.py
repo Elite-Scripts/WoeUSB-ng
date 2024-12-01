@@ -734,11 +734,11 @@ class ReportCopyProgress(threading.Thread):
             if gui is not None:
                 gui.state = string
                 gui.progress = percentage
-            else:
-                print(string)
-                print(str(percentage) + "%")
+            # else:
+            #     print(string)
+            #     print(str(percentage) + "%")
 
-            time.sleep(0.05)
+            time.sleep(1)
         if gui is not None:
             gui.progress = False
 
