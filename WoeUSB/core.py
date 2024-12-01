@@ -506,10 +506,10 @@ def copy_filesystem_files(source_fs_mountpoint, target_fs_mountpoint):
             path = os.path.join(dirpath, file)
             CopyFiles_handle.file = path
 
-            if os.path.getsize(path) > 5 * 1024 * 1024:  # Files bigger than 5 MiB
-                copy_large_file(path, target_fs_mountpoint + path.replace(source_fs_mountpoint, ""))
-            else:
-                shutil.copy2(path, target_fs_mountpoint + path.replace(source_fs_mountpoint, ""))
+            # if os.path.getsize(path) > 5 * 1024 * 1024:  # Files bigger than 5 MiB
+            #     copy_large_file(path, target_fs_mountpoint + path.replace(source_fs_mountpoint, ""))
+            # else:
+            shutil.copy2(path, target_fs_mountpoint + path.replace(source_fs_mountpoint, ""))
 
     CopyFiles_handle.stop = True
 
