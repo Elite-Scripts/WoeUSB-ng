@@ -464,13 +464,17 @@ def mount_target_filesystem(target_partition, target_fs_mountpoint):
     # os.makedirs(target_fs_mountpoint, exist_ok=True)
 
     if subprocess.run(["mkdir", "--parents", target_fs_mountpoint]).returncode != 0:
-        utils.print_with_color(_("Error: Unable to create {0} mountpoint directory").format(target_fs_mountpoint), "red")
+        utils.print_with_color(_("Error: Unable to create {0} mountpoint directory").format(target_fs_mountpoint),
+                               "red")
         return 1
 
-    if subprocess.run(["mount",
-                       target_partition,
-                       target_fs_mountpoint]).returncode != 0:
-        utils.print_with_color(_("Error: Unable to mount target media"), "red")
+    mount_process = subprocess.run(["mount", target_partition,
+                                    target_fs_mountpoint],
+                                   stderr=subprocess.PIPE)
+
+    if mount_process.returncode != 0:
+        error_output = mount_process.stderr.decode()
+        utils.print_with_color(_("Error: Unable to mount target media. Error details: {0}".format(error_output)), "red")
         return 1
 
 
