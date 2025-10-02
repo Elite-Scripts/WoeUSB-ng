@@ -175,7 +175,8 @@ def main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media,
 
     if install_mode == "device":
         wipe_existing_partition_table_and_filesystem_signatures(target_device)
-        create_target_partition_table(target_device, "legacy")
+        partition_table_type = "gpt" if skip_legacy_bootloader else "legacy"
+        create_target_partition_table(target_device, partition_table_type, skip_legacy_bootloader)
         create_target_partition(target_device, target_partition, target_filesystem_type, target_filesystem_type,
                                 command_mkdosfs,
                                 command_mkntfs)
@@ -258,7 +259,7 @@ def check_if_the_drive_is_really_wiped(target_device):
     return 0
 
 
-def create_target_partition_table(target_device, partition_table_type):
+def create_target_partition_table(target_device, partition_table_type, skip_legacy_bootloader=False):
     """
     :param target_device:
     :param partition_table_type:
@@ -271,8 +272,12 @@ def create_target_partition_table(target_device, partition_table_type):
     if partition_table_type in ["legacy", "msdos", "mbr", "pc"]:
         parted_partiton_table_argument = "msdos"
     elif partition_table_type in ["gpt", "guid"]:
-        utils.print_with_color(_("Error: Currently GUID partition table is not supported."), "red")
-        return 1
+        if partition_table_type == "gpt" and skip_legacy_bootloader == True:
+            utils.print_with_color(_("Because we Legacy Bootloader we are allowing a gpt partition table."), "green")
+            parted_partiton_table_argument = "gpt"
+        else:
+            utils.print_with_color(_("Error: Currently GUID partition table is not supported."), "red")
+            return 1
     else:
         utils.print_with_color(_("Error: Partition table not supported."), "red")
         return 1
