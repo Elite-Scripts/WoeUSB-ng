@@ -351,6 +351,7 @@ def create_target_partition(target_device, target_partition, filesystem_type, fi
                         "primary",
                         parted_mkpart_fs_type,
                         "4MiB",
+                        "--",
                         "-100MiB"], check=True)  # Leave 512KiB==1024sector in traditional 512bytes/sector disk, disks with sector with more than 512bytes only result in partition size greater than 512KiB and is intentionally let-it-be.
     # FIXME: Leave exact 512KiB in all circumstances is better, but the algorithm to do so is quite brainkilling.
     else:
@@ -404,6 +405,7 @@ def create_uefi_ntfs_support_partition(target_device):
                     "primary",
                     "fat16",
                     "-100MiB",
+                    "--",
                     "100%"], check=True)
 
 def set_parted_flag(target_device: str, part_number: int, flag: str, enabled: bool) -> None:
