@@ -273,7 +273,7 @@ def create_target_partition_table(target_device, partition_table_type, skip_lega
         parted_partiton_table_argument = "msdos"
     elif partition_table_type in ["gpt", "guid"]:
         if partition_table_type == "gpt" and skip_legacy_bootloader == True:
-            utils.print_with_color(_("Because we Legacy Bootloader we are allowing a gpt partition table."), "green")
+            utils.print_with_color(_("The legacy bootloader is skipped, we will allow/use a gpt partition table."), "green")
             parted_partiton_table_argument = "gpt"
         else:
             utils.print_with_color(_("Error: Currently GUID partition table is not supported."), "red")
