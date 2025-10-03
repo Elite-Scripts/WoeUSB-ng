@@ -352,7 +352,7 @@ def create_target_partition(target_device, target_partition, filesystem_type, fi
                         parted_mkpart_fs_type,
                         "4MiB",
                         "--",
-                        "-2049s"])  # Leave 512KiB==1024sector in traditional 512bytes/sector disk, disks with sector with more than 512bytes only result in partition size greater than 512KiB and is intentionally let-it-be.
+                        "-100MiB"])  # Leave 512KiB==1024sector in traditional 512bytes/sector disk, disks with sector with more than 512bytes only result in partition size greater than 512KiB and is intentionally let-it-be.
     # FIXME: Leave exact 512KiB in all circumstances is better, but the algorithm to do so is quite brainkilling.
     else:
         utils.print_with_color(_("FATAL: Illegal {0}, please report bug.").format(parted_mkpart_fs_type), "red")
@@ -390,14 +390,22 @@ def create_uefi_ntfs_support_partition(target_device):
     # FIXME: The partition type should be `fat12` but `fat12` isn't recognized by Parted...
     # NOTE: The --align is set to none because this partition is indeed misaligned, but ignored due to it's small size
 
+    # subprocess.run(["parted",
+    #                 "--align", "none",
+    #                 "--script",
+    #                 target_device,
+    #                 "mkpart",
+    #                 "primary",
+    #                 "fat16",
+    #                 "--", "-2048s", "-1s"])
     subprocess.run(["parted",
-                    "--align", "none",
                     "--script",
                     target_device,
                     "mkpart",
                     "primary",
                     "fat16",
-                    "--", "-2048s", "-1s"])
+                    "100%",
+                    "--", "-100MiB"])
 
 def set_parted_flag(target_device: str, part_number: int, flag: str, enabled: bool) -> None:
     """
