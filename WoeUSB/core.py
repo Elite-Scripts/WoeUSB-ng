@@ -398,15 +398,23 @@ def create_uefi_ntfs_support_partition(target_device):
     #                 "primary",
     #                 "fat16",
     #                 "--", "-2048s", "-1s"])
-    subprocess.run(["parted",
-                    "--script",
-                    target_device,
-                    "mkpart",
-                    "primary",
-                    "fat16",
-                    "-100MiB",
-                    "--",
-                    "100%"], check=True)
+    try:
+        subprocess.run(["parted",
+                        "--script",
+                        target_device,
+                        "mkpart",
+                        "primary",
+                        "fat16",
+                        "-100MiB",
+                        "--",
+                        "100%"], check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        utils.print_with_color(_("FATAL: Illegal {0}, please report bug.").format(e), "red")
+        if e.stdout:
+            utils.print_with_color(e.stdout.strip(), "red")
+        if e.stderr:
+            utils.print_with_color(e.stderr.strip(), "red")
+        raise
 
 def set_parted_flag(target_device: str, part_number: int, flag: str, enabled: bool) -> None:
     """
