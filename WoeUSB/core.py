@@ -184,6 +184,11 @@ def main(source_fs_mountpoint, target_fs_mountpoint, source_media, target_media,
         if target_filesystem_type == "NTFS":
             create_uefi_ntfs_support_partition(target_device)
             install_uefi_ntfs_support_partition(target_device + "2", temp_directory)
+            if skip_legacy_bootloader:
+                set_parted_flag(target_device, 1, "esp", True)
+                set_parted_flag(target_device, 1, "boot", False)
+                set_parted_flag(target_device, 1, "bios_grub", False)
+                set_parted_flag(target_device, 1, "legacy_boot", False)
 
     if install_mode == "partition":
         utils.check_target_partition(target_partition, target_device)
@@ -393,6 +398,35 @@ def create_uefi_ntfs_support_partition(target_device):
                     "primary",
                     "fat16",
                     "--", "-2048s", "-1s"])
+
+def set_parted_flag(target_device: str, part_number: int, flag: str, enabled: bool) -> None:
+    """
+    Set or clear a partition flag using parted.
+
+    This issues: parted --script <target_device> set <part_number> <flag> on|off
+
+    :param target_device: e.g., "/dev/sdX"
+    :param part_number: partition number, e.g., 1
+    :param flag: flag name, e.g., "esp", "boot", "bios_grub"
+    :param enabled: True to turn the flag on, False to turn it off
+    :return: None
+    """
+    utils.check_kill_signal()
+    state = "on" if enabled else "off"
+    # Provide user-visible logging
+    action_text = _("Setting partition flag: device={device}, part={part}, flag={flag}, state={state}").format(
+        device=target_device, part=part_number, flag=flag, state=state
+    )
+    utils.print_with_color(action_text, "green")
+    subprocess.run([
+        "parted",
+        "--script",
+        target_device,
+        "set",
+        str(part_number),
+        flag,
+        state
+    ])
 
 
 def install_uefi_ntfs_support_partition(uefi_ntfs_partition, download_directory):
