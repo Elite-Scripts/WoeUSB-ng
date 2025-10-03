@@ -405,9 +405,8 @@ def create_uefi_ntfs_support_partition(target_device):
                         "mkpart",
                         "primary",
                         "fat16",
-                        "-100MiB",
                         "--",
-                        "100%"], check=True, capture_output=True, text=True)
+                        "-95MiB", "-5MiB"], check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
         utils.print_with_color(_("FATAL: Illegal {0}, please report bug.").format(e), "red")
         if e.stdout:
