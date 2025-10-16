@@ -297,6 +297,9 @@ def get_current_state():
     global current_state
     return current_state
 
+def set_current_state(state: str):
+    global current_state
+    current_state = state
 
 def get_copyfiles_handle():
     global CopyFiles_handle
